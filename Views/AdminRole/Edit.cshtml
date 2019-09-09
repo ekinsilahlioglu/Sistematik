@@ -1,0 +1,84 @@
+﻿@model RoleDetails
+@{
+    ViewData["Title"] = "Edit";
+}
+
+
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+
+
+<div class="text-left">
+    <h2>Edit Role</h2>
+    <hr />
+</div>
+
+<div class="text-danger" asp-validation-summary="ModelOnly"></div>
+
+<form asp-action="Edit" method="post">
+    <input type="hidden" name="RoleId" value="@Model.Role.Id" />
+    <input type="hidden" name="RoleName" value="@Model.Role.Name" />
+
+
+    <h6 class="bg-warning p-1 text-black"> Add  @Model.Role.Name</h6>
+    <table class="table">
+        <tr>
+            <th>User Name</th>
+            <th>User Email</th>
+            <th></th>
+        </tr>
+        @if (Model.NonMembers.Count() == 0)
+        {
+            <tr>
+                <td colspan="2"> All users are members</td>
+            </tr>
+        }
+        else
+        {
+            @foreach (var user in Model.NonMembers)
+            {
+                <tr>
+                    <td>@user.UserName</td>
+                    <td>@user.Email</td>
+                    <td>
+                        <input type="checkbox" name="IdsToAdd" value="@user.Id" />
+                    </td>
+                </tr>
+
+            }
+        }
+    </table>
+
+
+    <h6 class="bg-warning p-1 text-black"> Delete @Model.Role.Name</h6>
+    <table class="table">
+         <tr>
+            <th>User Name</th>
+            <th>User Email</th>
+            <th></th>
+        </tr>
+        @if (Model.Members.Count() == 0)
+        {
+            <tr>
+                <td colspan="2"> No user</td>
+            </tr>
+        }
+        else
+        {
+            @foreach (var user in Model.Members)
+            {
+                <tr>
+                    <td>@user.UserName</td>
+                    <td>@user.Email</td>
+                    <td>
+                        <input type="checkbox" name="IdsToDelete" value="@user.Id" />
+                    </td>
+                </tr>
+
+            }
+        }
+    </table>
+    <button type="submit" class="btn btn-success"> Save</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+
+
+</form>

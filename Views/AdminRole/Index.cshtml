@@ -1,0 +1,59 @@
+﻿@model IEnumerable<IdentityRole>
+@{
+    ViewData["Title"] = "Index";
+}
+
+
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+
+
+<div class="text-left">
+    <h2>Role List</h2>
+    <hr />
+</div>
+
+<div class="text-danger" asp-validation-summary="ModelOnly"></div>
+
+<table class="table table-bordered table-striped m-1 p-1">
+    <tr>
+        <th>Role ID</th>
+        <th>Authorization</th>
+        <th>Role Name</th>
+        <th>Users</th>
+
+    </tr>
+
+    @if (Model.Count() == 0)
+    {
+        <tr>
+            <td colspan="4" class="text-center">
+                No Role
+            </td>
+        </tr>
+    }
+    else
+    {
+        foreach (var role in Model)
+        {
+            <tr>
+                <td>@role.Id</td>
+                <td>
+                    <a asp-action="AutUpdate" asp-route-id="@role.Id" class="btn btn-outline-primary">Edit</a>
+                </td>
+                <td>@role.Name</td>
+                <td identity-role="@role.Id"> </td>
+                <td>
+                    <form asp-route-id="@role.Id" asp-action="Delete" method="post">
+                        <button type="submit" class="btn btn-outline-danger">Delete</button>
+                        <a asp-action="Edit" asp-route-id="@role.Id" class="btn btn-outline-primary">Edit</a>
+                    </form>
+                </td>
+            </tr>
+        }
+    }
+
+    <a asp-action="Create" class="btn btn-info">Create Roles</a>
+    <a asp-action="Page" asp-controller="Home" class="btn btn-danger"> Cancel</a>
+
+</table>
+
