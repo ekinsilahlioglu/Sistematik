@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -15,6 +16,7 @@ namespace First_part.Controllers
         private RoleManager<IdentityRole> roleManager;
         private UserManager<ApplicationUser> userManager;
         private ApplicationIdentityDbContext context { get; set; }
+
         public AdminRoleController(ApplicationIdentityDbContext _context,RoleManager<IdentityRole> _roleManager, UserManager<ApplicationUser> _userManager)
         {
             roleManager = _roleManager;
@@ -155,26 +157,40 @@ namespace First_part.Controllers
         }
 
 
-        private MyAuthorization myAuthorization = new MyAuthorization();
-
-
-
         public IActionResult AutUpdate(string id)
         {
-
             var selectedPermissions = context.RolePermissions.Where(rp => rp.RoleId == id)
                 .Select(rp => rp.PermissionId).ToList();
 
             ViewBag.selectedPermission = selectedPermissions;
-
             var permissions = context.Permissions.ToList();
 
             return View(permissions);
         }
 
 
+        private MyAuthorization myAuthorization = new MyAuthorization();
 
 
+        [HttpPost]
+        public IActionResult AutUpdate(string[] myCheckBox,string id)
+        {
+
+            var perRole = context.RolePermissions.Where(p => p.RoleId == id);
+            var y = perRole.ToList();
+            context.RolePermissions.RemoveRange(y);
+
+            foreach (var item in myCheckBox)
+            {
+                context.RolePermissions.Add(new RolePermission {PermissionId=item, RoleId=id });
+                
+            }
+
+            context.SaveChanges();
+           
+            
+            return RedirectToAction("Index");
+        }
 
 
     }//end of class
