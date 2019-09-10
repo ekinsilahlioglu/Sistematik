@@ -14,11 +14,12 @@ namespace First_part.Controllers
     {
         private RoleManager<IdentityRole> roleManager;
         private UserManager<ApplicationUser> userManager;
-
-        public AdminRoleController(RoleManager<IdentityRole> _roleManager, UserManager<ApplicationUser> _userManager)
+        private ApplicationIdentityDbContext context { get; set; }
+        public AdminRoleController(ApplicationIdentityDbContext _context,RoleManager<IdentityRole> _roleManager, UserManager<ApplicationUser> _userManager)
         {
             roleManager = _roleManager;
             userManager = _userManager;
+            context = _context;
         }
 
        
@@ -158,11 +159,17 @@ namespace First_part.Controllers
 
 
 
-        public IActionResult AutUpdate(RoleEditModel model)
+        public IActionResult AutUpdate(string id)
         {
 
+            var selectedPermissions = context.RolePermissions.Where(rp => rp.RoleId == id)
+                .Select(rp => rp.PermissionId).ToList();
 
-            return View();
+            ViewBag.selectedPermission = selectedPermissions;
+
+            var permissions = context.Permissions.ToList();
+
+            return View(permissions);
         }
 
 
