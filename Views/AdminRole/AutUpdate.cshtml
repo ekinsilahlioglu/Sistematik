@@ -1,4 +1,4 @@
-﻿@model RolePermission
+﻿@model List<Permission> 
 @{
     ViewData["Title"] = "Aut";
   
@@ -16,14 +16,21 @@
 <div class="m-2 p-1">
 
 
+    @foreach (var item in Model)
+    {
 
-    <input type="checkbox" name="AutUpdate" /> Page
-    <br />
-    <input type="checkbox" name="AutUpdate" /> Page2
-    <br />
-    <input type="checkbox" name="AutUpdate" /> Page3
-    <br />
-    <br />
+        @if(((List<string>)ViewBag.selectedPermission).Any(sp => sp ==item.Id)){
+            
+        <input type="checkbox" name="AutUpdate" value="@item.Id" checked /> @item.Name
+        <br /> <br />
+        }else{
+        <br /> <br />
+        <input type="checkbox" name="AutUpdate" value="@item.Id" /> @item.Name
+
+        }
+    }
+
+    
 
 
 
@@ -31,8 +38,7 @@
 
 
 
-
-
+        <br />
     <input type="submit" class="btn btn-success" value="Submit" />
     <a asp-action="Index" asp-controller="AdminRole" class="btn btn-danger">Cancel</a>
 </div>
